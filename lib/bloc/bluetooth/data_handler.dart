@@ -1,3 +1,4 @@
+import 'package:mangueapp/resources/models/bluetooth_message.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -24,7 +25,10 @@ class DataHandler {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-CREATE TABLE $
+CREATE TABLE $tableMessages(
+  ${MessageFields.rpm}
+  
+)
 ''');
   }
 
