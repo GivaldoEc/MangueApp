@@ -22,7 +22,11 @@ class DataHandler {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database db, int version) async {}
+  Future _createDB(Database db, int version) async {
+    await db.execute('''
+CREATE TABLE $
+''');
+  }
 
   Future close() async {
     final db = await instance.database;

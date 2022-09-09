@@ -1,4 +1,12 @@
+import 'package:flutter/foundation.dart';
+
 import 'acelerometer_data.dart';
+
+const String tableMessages = 'messages';
+
+class MessageFields {
+  static final String id = 'id';
+}
 
 class BTMessage {
   final AcelerometerData acelerometerData;
