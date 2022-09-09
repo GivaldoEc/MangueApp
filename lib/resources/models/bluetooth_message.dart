@@ -5,7 +5,11 @@ import 'acelerometer_data.dart';
 const String tableMessages = 'messages';
 
 class MessageFields {
-  static final String id = 'id';
+  static const String rpm = 'rpm';
+  static const String speed = 'speed';
+  static const String temperature = 'temperature';
+  static const String flags = 'flags';
+  static const String timeStamp = 'timeStamp';
 }
 
 class BTMessage {
