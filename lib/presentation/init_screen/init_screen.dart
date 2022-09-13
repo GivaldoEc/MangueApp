@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/bloc/bluetooth/bluetooth_bloc.dart';
 
-class InitScreen extends StatelessWidget {
-  const InitScreen({super.key});
+class BluetoothScreen extends StatelessWidget {
+  const BluetoothScreen({super.key});
+  final String appTitle = "Bluetooth App";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bluetooth App"),
+        title: Text(appTitle),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: BlocBuilder<BluetoothBloc, BluetoothState>(
+          builder: (context, state) {
+            return ListView(
+              padding: const EdgeInsets.all(8),
+              children: [],
+            );
+          },
         ),
       ),
     );

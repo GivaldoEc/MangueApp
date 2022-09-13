@@ -1,4 +1,4 @@
-class AcelerometerData {
+class AccelerometerData {
   final int accX;
   final int accY;
   final int accZ;
@@ -6,7 +6,7 @@ class AcelerometerData {
   final int dpsY;
   final int dpsZ;
 
-  const AcelerometerData({
+  const AccelerometerData({
     required this.accX,
     required this.accY,
     required this.accZ,

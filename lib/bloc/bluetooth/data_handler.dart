@@ -10,9 +10,10 @@ class DataHandler {
   DataHandler._init();
 
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null)
+      return _database!; // checks for pre-existing databases
 
-    _database = await _initDB('manguedb.db');
+    _database = await _initDB('manguedb.db'); // creates new database
     return _database!;
   }
 
@@ -24,12 +25,30 @@ class DataHandler {
   }
 
   Future _createDB(Database db, int version) async {
+    const String idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    const String integerType = 'INTEGER NOT NULL';
+    const String accelerometerType = 'ACCELEROMETER ';
+
     await db.execute('''
 CREATE TABLE $tableMessages(
-  ${MessageFields.rpm}
-  
+  ${MessageFields.id} $idType,
+  ${MessageFields.accelerometerData} $accelerometerType,
+  ${MessageFields.rpm} $integerType,
+  ${MessageFields.speed} $integerType,
+  ${MessageFields.temperature} $integerType,
+  ${MessageFields.flags} $integerType,
+  ${MessageFields.timeStamp} $integerType,
 )
 ''');
+  }
+
+  // TODO: create query method
+
+  Future create(BTMessage btMessage) async {
+    final db = await instance.database;
+    final id = await db.insert(tableMessages, btMessage.toJson());
+
+    return btMessage.copy(id: id);
   }
 
   Future close() async {

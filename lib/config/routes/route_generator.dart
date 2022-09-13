@@ -8,11 +8,11 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-            builder: (_) => const InitScreen()); // First screen
+            builder: (_) => const BluetoothScreen()); // First screen
       // TO DO: implement splashscreen
       default:
         return MaterialPageRoute(
-            builder: (_) => const InitScreen()); // return to init screen
+            builder: (_) => const BluetoothScreen()); // return to init screen
     }
   }
 }
