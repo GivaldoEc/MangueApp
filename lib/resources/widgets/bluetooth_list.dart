@@ -9,16 +9,38 @@ class BluetoothList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BtCubit btcubit = BlocProvider.of<BtCubit>(context);
-    if (false){//btcubit.getDevices().isEmpty){
-    return const Text("Nothing Found");
-  } else{
-    return ListView.separated(
-      padding: const EdgeInsets.all(8.0),
-      itemBuilder: (BuildContext context, int index) {
-        return const BLuetoothContainer();
-      },
-      itemCount: 5, //btcubit.getDevices().length,
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-    );}
+    if (btcubit.getDevices().isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Nothing Found"),
+          Padding(
+            padding: const EdgeInsets.all(20 ),
+            child: GestureDetector(
+              onTap: () {
+                btcubit.lookForDevices();
+              },
+              child: const BLuetoothContainer(text: "Try again"),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return ListView.separated(
+        padding: const EdgeInsets.all(8.0),
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              btcubit.connectToDevice(btcubit.getDevices()[index]!);
+            },
+            child: BLuetoothContainer(
+              text: btcubit.getDevices()[index]!.toString(),
+            ),
+          );
+        },
+        itemCount: 5, //btcubit.getDevices().length,
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+      );
+    }
   }
 }

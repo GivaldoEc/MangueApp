@@ -9,13 +9,12 @@ part 'bt_state.dart';
 StreamController<List<int>> cont = StreamController<List<int>>.broadcast();
 
 class BtCubit extends Cubit<BtState> {
-  bool connected = false;
   List<BluetoothDevice?> _deviceList = [];
+  late BluetoothDevice _connectedDevice;
 
   //variáveis para o funcionamento do código
   final FlutterBlue flutterBlue = FlutterBlue.instance;
   late StreamSubscription btSubscription;
-  late BluetoothDevice devv;
   Stream<List<int>> listStream = cont.stream;
 
   //Emite estados do bloc com base no bluetooth
@@ -25,15 +24,15 @@ class BtCubit extends Cubit<BtState> {
         emit(
           BtOFF(),
         );
-      } else if (btState == BluetoothState.on && !connected) {
+      } else if (btState == BluetoothState.on) {
         emit(
-          BtDisconnected(),
+          BtDisconnected(deviceList: const []),
         );
       }
     });
   }
 
-  //lista dispositivos
+  // look for devices
   Future<List<BluetoothDevice>> lookForDevices() async {
     List<BluetoothDevice> devices = [];
 
@@ -54,10 +53,12 @@ class BtCubit extends Cubit<BtState> {
     flutterBlue.stopScan();
 
     if (devices.isNotEmpty) {
-      print(devices);
       _deviceList = devices;
+      emit(BtDisconnected(deviceList: devices));
       return devices;
     } else {
+      _deviceList = [];
+      emit(BtNothingFound());
       return [];
     }
   }
@@ -67,51 +68,29 @@ class BtCubit extends Cubit<BtState> {
     return _deviceList;
   }
 
-  void situationalCaller(List list) {
-    if (list.isEmpty) {
-      emit(BtNothingFound());
-    } else {
-      emit(BtFound());
-    }
-  }
-
   //Lista serviços constantemente
-
-  Future discoverServices(BluetoothDevice device, bool isready) async {
+  Future discoverServices(BluetoothDevice device) async {
     List<BluetoothService> services = await device.discoverServices();
     services.forEach((service) {
       service.characteristics.forEach((characteristic) {
         listStream = characteristic.value.asBroadcastStream();
         characteristic.setNotifyValue(!characteristic.isNotifying);
-        isready = true;
       });
     });
   }
 
   //Funções chave
-  Future connectToDevice(
-      BluetoothDevice device, bool isconn, bool isready) async {
-    await device.connect(autoConnect: false);
-    isconn = true;
-    connected = isconn;
-    devv = device;
-    emit(BtConnected(device: device, listStream: listStream));
+  Future connectToDevice(BluetoothDevice device) async {
+    await device.connect(
+      autoConnect: false,
+      timeout: const Duration(seconds: 7),
+    );
+    emit(BtConnected(device: device));
   }
 
-  //disconecta e reinicia o cubit
-  Future<void> disconnectBt(bool connectionStateBool) async {
-    await devv.disconnect();
-    connectionStateBool = false;
-  }
-
-  //tenta novamente
-  void retry() {
-    emit(BtDisconnected());
-  }
-
-  void notFound() {
-    emit(BtNothingFound());
-    return;
+  // Disconnects and resets bluetooth bloc
+  Future<void> disconnectBt() async {
+    await _connectedDevice.disconnect();
   }
 
   //Função para fechar as Streams

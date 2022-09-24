@@ -3,22 +3,25 @@ part of 'bt_cubit.dart';
 @immutable
 abstract class BtState {}
 
-class BtInitial extends BtState {} //estado inicial
+class BtInitial extends BtState {} // Initial state
 
-class BtOFF extends BtState {} //estado para bluetooth desligado
+class BtOFF extends BtState {} // Bluetooth not eneabled
 
-class BtDisconnected extends BtState {} //bluetooth ligado, mas não conectado
+class BtDisconnected extends BtState {
+  final List<BluetoothDevice?> deviceList;
+
+  BtDisconnected({
+    required this.deviceList,
+  });
+} // Bluetooth turned on, but no device connected
+
+class BtSearching extends BtState {} // Looking for devices
 
 class BtConnected extends BtState {
   final BluetoothDevice device;
-  final Stream<List<int>>? listStream;
-
-  BtConnected(
-      {required this.device,
-      required this.listStream}); //bluetooth ligado e conectado
+  BtConnected({
+    required this.device,
+  }); // Bluetooth connected
 }
 
-class BtFound extends BtState {
-} //estado intermediário. Ligado mas não conectado
-
-class BtNothingFound extends BtState {}
+class BtNothingFound extends BtState {} // No device found

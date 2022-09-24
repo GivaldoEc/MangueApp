@@ -18,11 +18,11 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) =>
               BtCubit(), // bluetooth bloc provider
         )
-      ],
+      ], 
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.blue, // TODO: implement cubit
         ),
         initialRoute: init,
         onGenerateRoute: RouteGenerator.generateRoute,
