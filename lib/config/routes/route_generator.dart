@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mangueapp/presentation/init_screen/init_screen.dart';
+import 'package:mangueapp/presentation/bluetooth/bluetooth_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

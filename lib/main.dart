@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mangueapp/bloc/bluetooth/bluetooth_bloc.dart';
+import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/config/routes/route_generator.dart';
 import 'package:mangueapp/config/routes/routes.dart';
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (BuildContext context) =>
-              BluetoothBloc(), // bluetooth bloc provider
+              BtCubit(), // bluetooth bloc provider
         )
       ],
       child: MaterialApp(
