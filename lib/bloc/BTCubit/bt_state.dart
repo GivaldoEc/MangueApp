@@ -24,4 +24,12 @@ class BtConnected extends BtState {
   }); // Bluetooth connected
 }
 
+class BtDonwloading extends BtState {
+  final BluetoothDevice device;
+  
+  BtDonwloading({
+    required this.device,
+  });
+} // Receiving data
+
 class BtNothingFound extends BtState {} // No device found

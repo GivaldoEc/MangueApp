@@ -38,6 +38,8 @@ class BtCubit extends Cubit<BtState> {
 
     flutterBlue.startScan(timeout: const Duration(seconds: 5));
 
+    emit(BtSearching());
+
     //Começa a procurar
     btSubscription = flutterBlue.scanResults.listen(
       (results) {
@@ -70,13 +72,14 @@ class BtCubit extends Cubit<BtState> {
 
   //Lista serviços constantemente
   Future discoverServices(BluetoothDevice device) async {
+    emit(BtDonwloading(device: device));
     List<BluetoothService> services = await device.discoverServices();
-    services.forEach((service) {
-      service.characteristics.forEach((characteristic) {
+    for (BluetoothService service in services) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
         listStream = characteristic.value.asBroadcastStream();
         characteristic.setNotifyValue(!characteristic.isNotifying);
-      });
-    });
+      }
+    }
   }
 
   //Funções chave
