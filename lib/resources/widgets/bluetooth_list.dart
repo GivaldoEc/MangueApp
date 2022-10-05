@@ -15,7 +15,7 @@ class BluetoothList extends StatelessWidget {
         children: [
           const Text("Nothing Found"),
           Padding(
-            padding: const EdgeInsets.all(20 ),
+            padding: const EdgeInsets.all(20),
             child: GestureDetector(
               onTap: () {
                 btcubit.lookForDevices();
@@ -26,20 +26,79 @@ class BluetoothList extends StatelessWidget {
         ],
       );
     } else {
-      return ListView.separated(
-        padding: const EdgeInsets.all(8.0),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              btcubit.connectToDevice(btcubit.getDevices()[index]!);
-            },
-            child: BLuetoothContainer(
-              text: btcubit.getDevices()[index]!.toString(),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(8.0),
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    btcubit.connectToDevice(btcubit.getDevices()[index]!);
+                  },
+                  child: BLuetoothContainer(
+                    text: btcubit.getDevices()[index]!.toString(),
+                  ),
+                );
+              },
+              itemCount: 5, //btcubit.getDevices().length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
             ),
-          );
-        },
-        itemCount: 5, //btcubit.getDevices().length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
+          ),
+          GestureDetector(
+            child: const BLuetoothContainer(text: "Look Again"),
+            onTap: () {
+              btcubit.lookForDevices();
+            },
+          ),
+        ],
+      );
+    }
+  }
+}
+
+class CharacteristicList extends StatelessWidget {
+  const CharacteristicList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    BtCubit btCubit = BlocProvider.of<BtCubit>(context);
+    if (btCubit.getCharacteristic().isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const BLuetoothContainer(text: "Conectado!"),
+          GestureDetector(
+            onTap: () {
+              btCubit.discoverServices(btCubit.getDevice());
+            },
+            child: const BLuetoothContainer(text: "Baixar"),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ListView.separated(
+                itemBuilder: (BuildContext context, int index) {
+                  return BLuetoothContainer(
+                      text: btCubit.getCharacteristic()[index].toString());
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+                itemCount: btCubit.getCharacteristic().length),
+          ),
+          GestureDetector(
+            onTap: () {
+              btCubit.discoverServices(btCubit.getDevice());
+            },
+            child: const BLuetoothContainer(text: "Baixar"),
+          ),
+        ],
       );
     }
   }

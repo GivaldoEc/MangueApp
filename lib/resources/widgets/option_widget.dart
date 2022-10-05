@@ -10,13 +10,16 @@ class BLuetoothContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 380,
-      decoration: BoxDecoration(
-          border:
-              Border.all(color: Colors.black), // TODO: Implement as textcolor
-          borderRadius: const BorderRadius.all(Radius.circular(40))),
-      child: Text(text),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        width: 380,
+        decoration: BoxDecoration(
+            border:
+                Border.all(color: Colors.black), // TODO: Implement as textcolor
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
+        child: Text(text),
+      ),
     );
   }
 }

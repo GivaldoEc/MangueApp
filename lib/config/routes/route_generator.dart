@@ -11,7 +11,7 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => const BluetoothScreen()); // First screen
       case '/THEME':
-        return MaterialPageRoute(builder: (_)=>  ThemeScreen());
+        return MaterialPageRoute(builder: (_)=>  const ThemeScreen());
       // TO DO: implement splashscreen
       default:
         return MaterialPageRoute(

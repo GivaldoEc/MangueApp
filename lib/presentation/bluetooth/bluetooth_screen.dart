@@ -35,19 +35,18 @@ class BluetoothScreen extends StatelessWidget {
               return const BLuetoothContainer(
                   text: "Para começar, ligue o bluetooth");
             } else if (state is BtDisconnected) {
-              return const Center(child: BluetoothList());
-            } else if (state is BtConnected){
-              return Column(
-                children: [
-                  const BLuetoothContainer(text: "Conectado!"),
-                  GestureDetector(onTap: () {
-                    BlocProvider.of<BtCubit>(context).discoverServices(state.device);
-                  }, child: const BLuetoothContainer(text: "Baixar"),)
-                ],
-              );
-            } else if (state is BtSearching){
+              return const BluetoothList();
+            } else if (state is BtConnected) {
+              return const CharacteristicList();
+            } else if (state is BtSearching) {
               return const CircularProgressIndicator();
-            } else if (state is BtNothingFound){
+            } else if (state is BtDonwloading) {
+              return const SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is BtNothingFound) {
               return const BLuetoothContainer(text: "Nothing found");
             } else {
               return const Text("Unknown Bloc State");

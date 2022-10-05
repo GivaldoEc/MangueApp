@@ -12,10 +12,11 @@ class BtCubit extends Cubit<BtState> {
   List<BluetoothDevice?> _deviceList = [];
   late BluetoothDevice _connectedDevice;
 
+  List<List<int>> _dataBuffer = [];
+
   //variáveis para o funcionamento do código
   final FlutterBlue flutterBlue = FlutterBlue.instance;
   late StreamSubscription btSubscription;
-  Stream<List<int>> listStream = cont.stream;
 
   //Emite estados do bloc com base no bluetooth
   BtCubit() : super(BtInitial()) {
@@ -65,10 +66,11 @@ class BtCubit extends Cubit<BtState> {
     }
   }
 
-  List<BluetoothDevice?> getDevices() {
-    // device getter
-    return _deviceList;
-  }
+  BluetoothDevice getDevice() => _connectedDevice;
+
+  List<List<int>> getCharacteristic() => _dataBuffer;
+
+  List<BluetoothDevice?> getDevices() => _deviceList;
 
   //Lista serviços constantemente
   Future discoverServices(BluetoothDevice device) async {
@@ -76,10 +78,11 @@ class BtCubit extends Cubit<BtState> {
     List<BluetoothService> services = await device.discoverServices();
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
-        listStream = characteristic.value.asBroadcastStream();
-        characteristic.setNotifyValue(!characteristic.isNotifying);
+         _dataBuffer.add(await characteristic.read());
       }
     }
+    emit(BtConnected(device: device));
+    return;
   }
 
   //Funções chave
@@ -89,6 +92,7 @@ class BtCubit extends Cubit<BtState> {
       timeout: const Duration(seconds: 7),
     );
     emit(BtConnected(device: device));
+    discoverServices(device);
   }
 
   // Disconnects and resets bluetooth bloc
