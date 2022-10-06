@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,13 +77,18 @@ class BtCubit extends Cubit<BtState> {
   Future discoverServices(BluetoothDevice device) async {
     emit(BtDonwloading(device: device));
     List<BluetoothService> services = await device.discoverServices();
+    Future.delayed(const Duration(seconds: 10), () {
+      emit(BtConnected(device: device));
+      return;
+    });
+
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
-         _dataBuffer.add(await characteristic.read());
+        //await characteristic.write(utf8.encode("R"));
+        //Future.delayed(const Duration(seconds: 2));
+        _dataBuffer.add(await characteristic.read());
       }
     }
-    emit(BtConnected(device: device));
-    return;
   }
 
   //Funções chave
@@ -91,8 +97,14 @@ class BtCubit extends Cubit<BtState> {
       autoConnect: false,
       timeout: const Duration(seconds: 7),
     );
-    emit(BtConnected(device: device));
-    discoverServices(device);
+    List<BluetoothDevice> connectedDevices = await flutterBlue.connectedDevices;
+    if (connectedDevices.contains(device)) {
+      emit(BtConnected(device: device));
+      discoverServices(device);
+      return;
+    } 
+    emit(BtDisconnected(deviceList: _deviceList));
+    return;
   }
 
   // Disconnects and resets bluetooth bloc
