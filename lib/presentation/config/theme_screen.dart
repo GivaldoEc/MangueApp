@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mangueapp/config/routes/routes.dart';
 import 'package:mangueapp/resources/widgets/option_widget.dart';
 
 class ThemeScreen extends StatelessWidget {
@@ -8,25 +7,31 @@ class ThemeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.bluetooth),
-        onPressed: () => Navigator.pushNamed(context, init),),
+        child: const Icon(Icons.arrow_back_rounded),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       body: Center(
-        child: ListView.separated(
-          
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                // TODO: implement theme cubit list here
-              },
-              child: const ThemeContainer(
-                text: "randomtheme",
-              ),
-            );
-          },
-          itemCount: 5, // TODO: implement bloc solution
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+          child: ListView.separated(
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  // TODO: implement theme cubit list here
+                },
+                child: const ThemeContainer(
+                  text: "randomtheme",
+                ),
+              );
+            },
+            itemCount: 5, // TODO: implement bloc solution
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+          ),
         ),
       ),
     );

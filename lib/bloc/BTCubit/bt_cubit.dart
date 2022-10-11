@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +9,12 @@ part 'bt_state.dart';
 StreamController<List<int>> cont = StreamController<List<int>>.broadcast();
 
 class BtCubit extends Cubit<BtState> {
-  List<BluetoothDevice?> _deviceList = [];
-  late BluetoothDevice _connectedDevice;
+  // current info
+  late BluetoothDevice? _connectedDevice;
 
-  List<List<int>> _dataBuffer = [];
+  List<BluetoothCharacteristic> _characteristics = [];
+  List<BluetoothDevice?> _deviceList = [];
+  List<List<int>> _characteristicData = [];
 
   //variáveis para o funcionamento do código
   final FlutterBlue flutterBlue = FlutterBlue.instance;
@@ -42,7 +43,7 @@ class BtCubit extends Cubit<BtState> {
 
     emit(BtSearching());
 
-    //Começa a procurar
+    // Starts looking
     btSubscription = flutterBlue.scanResults.listen(
       (results) {
         for (ScanResult r in results) {
@@ -67,31 +68,49 @@ class BtCubit extends Cubit<BtState> {
     }
   }
 
-  BluetoothDevice getDevice() => _connectedDevice;
+  List<List<int>> getCharacteristicData() => _characteristicData;
 
-  List<List<int>> getCharacteristic() => _dataBuffer;
+  BluetoothDevice? getDevice() => _connectedDevice;
+
+  List<BluetoothCharacteristic> getCharacteristics() => _characteristics;
 
   List<BluetoothDevice?> getDevices() => _deviceList;
 
-  //Lista serviços constantemente
-  Future discoverServices(BluetoothDevice device) async {
-    emit(BtDonwloading(device: device));
-    List<BluetoothService> services = await device.discoverServices();
-    Future.delayed(const Duration(seconds: 10), () {
-      emit(BtConnected(device: device));
+  Future scanCharacteristics() async {
+    _characteristics = [];
+    _characteristicData = [];
+    emit(BtDonwloading(device: _connectedDevice!));
+    List<BluetoothService> services =
+        await _connectedDevice!.discoverServices();
+    Future.delayed(const Duration(seconds: 5), () {
+      emit(BtConnected(device: _connectedDevice!));
       return;
     });
-
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
-        //await characteristic.write(utf8.encode("R"));
-        //Future.delayed(const Duration(seconds: 2));
-        _dataBuffer.add(await characteristic.read());
+        _characteristics.add(characteristic);
+        _characteristicData.add(await characteristic.read());
       }
     }
   }
 
-  //Funções chave
+  Future sendOpenRequisition(BluetoothCharacteristic receptor) async {
+    emit(BtDonwloading(device: _connectedDevice!));
+    Future.delayed(const Duration(seconds: 3), () {
+      scanCharacteristics(); // just for debug purpouse
+      return;
+    });
+    print("trying to send");
+    await receptor.write([1]);
+    print("sent");
+  }
+
+  Future sendClosingRequisition(BluetoothCharacteristic receptor) async {
+    await receptor.write([0]);
+    return;
+  }
+
+  // Key functions
   Future connectToDevice(BluetoothDevice device) async {
     await device.connect(
       autoConnect: false,
@@ -99,20 +118,26 @@ class BtCubit extends Cubit<BtState> {
     );
     List<BluetoothDevice> connectedDevices = await flutterBlue.connectedDevices;
     if (connectedDevices.contains(device)) {
+      _connectedDevice = device;
       emit(BtConnected(device: device));
-      discoverServices(device);
+      scanCharacteristics();
       return;
-    } 
+    }
+    _connectedDevice = null;
     emit(BtDisconnected(deviceList: _deviceList));
     return;
   }
 
   // Disconnects and resets bluetooth bloc
   Future<void> disconnectBt() async {
-    await _connectedDevice.disconnect();
+    await _connectedDevice!.disconnect();
+    _connectedDevice = null;
+    _characteristicData = [];
+    _characteristics = [];
+    emit(BtDisconnected(deviceList: const []));
   }
 
-  //Função para fechar as Streams
+  // Closing Stream function
   @override
   Future<void> close() {
     btSubscription.cancel();

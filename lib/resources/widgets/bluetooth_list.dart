@@ -65,16 +65,16 @@ class CharacteristicList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BtCubit btCubit = BlocProvider.of<BtCubit>(context);
-    if (btCubit.getCharacteristic().isEmpty) {
+    if (btCubit.getCharacteristics().isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const BLuetoothContainer(text: "Conectado!"),
           GestureDetector(
             onTap: () {
-              btCubit.discoverServices(btCubit.getDevice());
+              btCubit.scanCharacteristics();
             },
-            child: const BLuetoothContainer(text: "Baixar"),
+            child: const BLuetoothContainer(text: "Listar Caracteristicas"),
           ),
         ],
       );
@@ -84,19 +84,33 @@ class CharacteristicList extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  return BLuetoothContainer(
-                      text: btCubit.getCharacteristic()[index].toString());
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-                itemCount: btCubit.getCharacteristic().length),
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    btCubit.sendOpenRequisition(
+                      btCubit.getCharacteristics()[index],
+                    );
+                  },
+                  child: BLuetoothContainer(
+                      text: btCubit.getCharacteristics()[index].toString()),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemCount: btCubit.getCharacteristics().length,
+            ),
           ),
           GestureDetector(
             onTap: () {
-              btCubit.discoverServices(btCubit.getDevice());
+              btCubit.scanCharacteristics();
             },
-            child: const BLuetoothContainer(text: "Baixar"),
+            child: const BLuetoothContainer(text: "Buscar novamente"),
+          ),
+          GestureDetector(
+            onTap: () {
+              btCubit.disconnectBt();
+            },
+            child: const BLuetoothContainer(text: "Desconectar"),
           ),
         ],
       );

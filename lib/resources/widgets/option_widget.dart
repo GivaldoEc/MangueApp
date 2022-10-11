@@ -40,11 +40,14 @@ class ThemeContainer extends StatelessWidget {
           border:
               Border.all(color: Colors.black,), // TODO: Implement as textcolor
           borderRadius: const BorderRadius.all(Radius.circular(40))),
-      child: Text(text,
-      style: const TextStyle(
-        fontSize: 30,
-        color: Colors.black, // TODO: implement cubit
-      ),),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(text,
+        style: const TextStyle(
+          fontSize: 30,
+          color: Colors.black, // TODO: implement cubit
+        ),),
+      ),
     );
   }
 }
