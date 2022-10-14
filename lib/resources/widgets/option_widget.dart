@@ -18,7 +18,10 @@ class BLuetoothContainer extends StatelessWidget {
             border:
                 Border.all(color: Colors.black), // TODO: Implement as textcolor
             borderRadius: const BorderRadius.all(Radius.circular(40))),
-        child: Text(text),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(text),
+        ),
       ),
     );
   }

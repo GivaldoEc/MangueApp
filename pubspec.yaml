@@ -16,11 +16,17 @@ dependencies:
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
 
-  #database
+  # database
   sqflite: ^2.0.3+1
 
-  #bluetooth
+  # bluetooth
   flutter_blue: ^0.8.0
+
+  # csv
+  csv: ^5.0.1 # downloaded simply for a test, shall be ignored near the final version
+  
+  # charts
+  fl_chart: ^0.55.2
 
   cupertino_icons: ^1.0.2
 
@@ -33,4 +39,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  #assets:
+  # assets:

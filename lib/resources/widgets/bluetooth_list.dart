@@ -42,7 +42,7 @@ class BluetoothList extends StatelessWidget {
                   ),
                 );
               },
-              itemCount: 5, //btcubit.getDevices().length,
+              itemCount: btcubit.getDevices().length,
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),
             ),

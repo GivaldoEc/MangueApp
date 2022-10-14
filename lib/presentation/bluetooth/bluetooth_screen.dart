@@ -13,37 +13,39 @@ class BluetoothWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: const MainNavigationBar(),
-      body: Center(
-        child: BlocBuilder<BtCubit, BtState>(
-          builder: (context, state) {
-            // bloc builder selection
-            if (state is BtInitial) {
-              return const BLuetoothContainer(
-                  text:
-                      "Bem vindo! \nPressione o botão abaixo para buscar dispositivos!");
-            } else if (state is BtOFF) {
-              return const BLuetoothContainer(
-                  text: "Para começar, ligue o bluetooth");
-            } else if (state is BtDisconnected) {
-              return const BluetoothList();
-            } else if (state is BtConnected) {
-              return const CharacteristicList();
-            } else if (state is BtSearching) {
-              return const CircularProgressIndicator();
-            } else if (state is BtDonwloading) {
-              return const SizedBox(
-                height: 100,
-                width: 100,
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is BtNothingFound) {
-              return const BLuetoothContainer(text: "Nothing found");
-            } else {
-              return const Text("Unknown Bloc State");
-            }
-          },
+    return SafeArea(
+      child: Scaffold(
+        bottomNavigationBar: const MainNavigationBar(),
+        body: Center(
+          child: BlocBuilder<BtCubit, BtState>(
+            builder: (context, state) {
+              // bloc builder selection
+              if (state is BtInitial) {
+                return const BLuetoothContainer(
+                    text:
+                        "Bem vindo! \nPressione o botão abaixo para buscar dispositivos!");
+              } else if (state is BtOFF) {
+                return const BLuetoothContainer(
+                    text: "Para começar, ligue o bluetooth");
+              } else if (state is BtDisconnected) {
+                return const BluetoothList();
+              } else if (state is BtConnected) {
+                return const CharacteristicList();
+              } else if (state is BtSearching) {
+                return const CircularProgressIndicator();
+              } else if (state is BtDonwloading) {
+                return const SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is BtNothingFound) {
+                return const BLuetoothContainer(text: "Nothing found");
+              } else {
+                return const Text("Unknown Bloc State");
+              }
+            },
+          ),
         ),
       ),
     );
