@@ -28,6 +28,9 @@ dependencies:
   # charts
   fl_chart: ^0.55.2
 
+  # mqtt
+  mqtt_client: ^9.7.2
+
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
@@ -39,4 +42,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
+  assets:
+    # Crabclaw
+    - assets/Icons/Header/capibaribe.png
+    - assets/Icons/Header/caxanga.png
+
+    # debug data
+    - assets/sensor_cvt.csv

@@ -37,19 +37,22 @@ class ThemeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      decoration: BoxDecoration(
-          border:
-              Border.all(color: Colors.black,), // TODO: Implement as textcolor
-          borderRadius: const BorderRadius.all(Radius.circular(40))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text(text,
-        style: const TextStyle(
-          fontSize: 30,
-          color: Colors.black, // TODO: implement cubit
-        ),),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        width: 300,
+        decoration: BoxDecoration(
+            border:
+                Border.all(color: Colors.black,), // TODO: Implement as textcolor
+            borderRadius: const BorderRadius.all(Radius.circular(40))),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+          child: Text(text,
+          style: const TextStyle(
+            fontSize: 25,
+            color: Colors.black, // TODO: implement cubit
+          ),),
+        ),
       ),
     );
   }

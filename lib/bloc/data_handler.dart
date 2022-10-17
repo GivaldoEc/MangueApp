@@ -1,4 +1,4 @@
-import 'package:mangueapp/resources/models/bluetooth_message.dart';
+import 'package:mangueapp/repositories/models/bluetooth_message.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

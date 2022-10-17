@@ -4,3 +4,7 @@ part of 'graph_cubit.dart';
 abstract class GraphState {}
 
 class GraphInitial extends GraphState {}
+
+class GraphLoadingData extends GraphState {}
+
+class GraphExposition extends GraphState {}

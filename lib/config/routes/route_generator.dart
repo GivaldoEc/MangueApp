@@ -5,6 +5,7 @@ import 'package:mangueapp/presentation/config/config_screen.dart';
 import 'package:mangueapp/presentation/graphics/graphic_screen.dart';
 import 'package:mangueapp/presentation/selection_widget.dart';
 import 'package:mangueapp/presentation/config/theme_screen.dart';
+import 'package:mangueapp/presentation/splash_screen/splash_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -19,9 +20,11 @@ class RouteGenerator {
       case configRoute:
         return MaterialPageRoute(builder: (_) => const ConfigScreen());
       case graphRoute:
-        return MaterialPageRoute(builder: (_) => GraphicScreen());
-        case themeRoute:
+        return MaterialPageRoute(builder: (_) => const GraphicScreen());
+      case themeRoute:
         return MaterialPageRoute(builder: (_) => const ThemeScreen());
+      case splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => const SelectionScreen()); // return to init screen

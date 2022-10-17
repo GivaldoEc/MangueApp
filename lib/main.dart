@@ -24,11 +24,12 @@ class MyApp extends StatelessWidget {
         )
       ], 
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'MangueApp',
         theme: ThemeData(
           primarySwatch: Colors.blue, // TODO: implement cubit
         ),
-        initialRoute: init,
+        initialRoute: splash,
         onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
