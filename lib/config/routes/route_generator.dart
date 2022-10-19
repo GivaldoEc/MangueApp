@@ -3,8 +3,8 @@ import 'package:mangueapp/config/routes/routes.dart';
 import 'package:mangueapp/presentation/bluetooth/bluetooth_screen.dart';
 import 'package:mangueapp/presentation/config/config_screen.dart';
 import 'package:mangueapp/presentation/graphics/graphic_screen.dart';
-import 'package:mangueapp/presentation/selection_widget.dart';
 import 'package:mangueapp/presentation/config/theme_screen.dart';
+import 'package:mangueapp/presentation/mqtt_screen/mqtt_screen.dart';
 import 'package:mangueapp/presentation/splash_screen/splash_screen.dart';
 
 class RouteGenerator {
@@ -12,9 +12,6 @@ class RouteGenerator {
     final Object? args = settings.arguments;
 
     switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(
-            builder: (_) => const SelectionScreen()); // First screen
       case bluetoothRoute:
         return MaterialPageRoute(builder: (_) => const BluetoothWidget());
       case configRoute:
@@ -25,9 +22,11 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ThemeScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case mqttRoute:
+        return MaterialPageRoute(builder: (_) => MqttPage());
       default:
         return MaterialPageRoute(
-            builder: (_) => const SelectionScreen()); // return to init screen
+            builder: (_) => const BluetoothWidget()); // return to init screen
     }
   }
 }

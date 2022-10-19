@@ -29,6 +29,12 @@ class MainNavigationBar extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  Navigator.of(context).pushNamed(mqttRoute);
+                },
+                icon: const Icon(Icons.wifi),
+              ),
+              IconButton(
+                onPressed: () {
                   Navigator.of(context).pushNamed(configRoute);
                 },
                 icon: const Icon(Icons.settings),
