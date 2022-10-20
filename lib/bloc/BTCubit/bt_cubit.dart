@@ -9,6 +9,13 @@ part 'bt_state.dart';
 StreamController<List<int>> cont = StreamController<List<int>>.broadcast();
 
 class BtCubit extends Cubit<BtState> {
+  bool _asyncMode = false;
+
+  void changeMode(asyncMode) {
+    _asyncMode = asyncMode;
+    return;
+  }
+
   // current info
   late BluetoothDevice? _connectedDevice;
 

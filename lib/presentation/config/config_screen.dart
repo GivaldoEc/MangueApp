@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
-
+import '../../bloc/AppModeCubit/app_mode_cubit.dart';
 import '../../config/routes/routes.dart';
 import '../../resources/widgets/option_widget.dart';
 
@@ -38,6 +40,25 @@ class ConfigScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed(themeRoute);
                       },
                       child: const ThemeContainer(text: "DevMode")),
+                  BlocBuilder<AppModeCubit, AppModeState>(
+                    builder: (context, state) {
+                      if (state is AppModeAsync) {
+                        return InkWell(
+                            onTap: () {
+                              BlocProvider.of<AppModeCubit>(context)
+                                  .changeMode(context);
+                            },
+                            child: const ThemeContainer(text: "Sync"));
+                      } else {
+                        return InkWell(
+                            onTap: () {
+                              BlocProvider.of<AppModeCubit>(context)
+                                  .changeMode(context);
+                            },
+                            child: const ThemeContainer(text: "Async"));
+                      }
+                    },
+                  ),
                 ],
               ),
             ],

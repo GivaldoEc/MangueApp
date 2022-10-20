@@ -31,6 +31,9 @@ dependencies:
   # mqtt
   mqtt_client: ^9.7.2
 
+  # gauges
+  syncfusion_flutter_gauges: ^20.3.50
+
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

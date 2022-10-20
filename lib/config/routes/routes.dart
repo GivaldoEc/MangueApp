@@ -7,3 +7,4 @@ const String graphRoute = '/GRAPH';
 const String themeRoute = '/THEME';
 const String splash = '/SPLASHSCREEN';
 const String mqttRoute = '/MQTT';
+const String gaugeRoute = '/GAUGESCREEN';
