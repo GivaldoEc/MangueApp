@@ -65,6 +65,6 @@ class MqttConCubit extends Cubit<MqttConState> {
     final builder = MqttClientPayloadBuilder();
     builder.addString('Hello from mqtt_client');
     print('EXAMPLE::Subscribing to the Dart/Mqtt_client/testtopic topic');
-    client.subscribe(mqtPubTopic, MqttQos.exactlyOnce);
+    client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);
   }
 }
