@@ -37,7 +37,7 @@ class MqttPage extends StatelessWidget {
                     return const CircularProgressIndicator();
                   } else {
                     return const BLuetoothContainer(
-                      text: "Disconectado",
+                      text: "Desconectado",
                     );
                   }
                 },

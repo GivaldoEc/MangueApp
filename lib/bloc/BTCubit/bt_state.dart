@@ -27,7 +27,7 @@ class BtConnected extends BtState {
 
 class BtDonwloading extends BtState {
   final BluetoothDevice device;
-  
+
   BtDonwloading({
     required this.device,
   });
@@ -35,4 +35,4 @@ class BtDonwloading extends BtState {
 
 class BtNothingFound extends BtState {} // No device found
 
-
+class BtSync extends BtState {} // BtSynchronized

@@ -87,9 +87,13 @@ class CharacteristicList extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    btCubit.sendOpenRequisition(
-                      btCubit.getCharacteristics()[index],
-                    );
+                    if (btCubit.asyncMode == true) {
+                      btCubit.sendOpenRequisition(
+                        btCubit.getCharacteristics()[index],
+                      );
+                    } else {
+                      btCubit.sinchronize();
+                    }
                   },
                   child: BLuetoothContainer(
                       text: btCubit.getCharacteristics()[index].toString()),

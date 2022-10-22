@@ -9,41 +9,45 @@ import '../../repositories/web/mqtt_config.dart';
 
 part 'mqtt_con_state.dart';
 
+MqttClient client = MqttServerClient.withPort(mqttBroker, '', 1883);
+
 class MqttConCubit extends Cubit<MqttConState> {
   MqttConCubit() : super(MqttConInitial());
 
-  MqttClient client = MqttServerClient(mqttBroker, '');
-
 // Connects to a broker
   void connect() async {
-    //StreamSubscription subscription;
+    print(mqttBroker);
 
-    emit(MqttConnecting());
-    client.connectTimeoutPeriod = 2000;
-    client.port = mqttPort;
     client.logging(on: true);
-    client.keepAlivePeriod = 30;
+
+    //StreamSubscription subscription;
+    emit(MqttConnecting());
 
     client.setProtocolV311();
+    client.keepAlivePeriod = 60;
+    client.connectTimeoutPeriod = 2000;
+    client.port = mqttPort;
 
-    final MqttConnectMessage connMess = MqttConnectMessage()
-        .withClientIdentifier(mqttUsername)
-        .startClean() // Non persistent session for testing
-        .withWillQos(MqttQos.atMostOnce);
-    client.connectionMessage = connMess;
+    client.websocketProtocols = MqttClientConstants.protocolsMultipleDefault;
+
+    // final MqttConnectMessage connMess = MqttConnectMessage()
+    //     .withClientIdentifier(mqttUsername)
+    //     .startClean() // Non persistent session for testing
+    //     .withWillQos(MqttQos.atMostOnce);
+    // client.connectionMessage = connMess;
 
     try {
       print("started waiting");
-      await client.connect();
+      await client.connect(mqttUsername, mqttPassword);
       print("ended waiting");
     } on NoConnectionException catch (e) {
-      // Raised by the client when connection fails.
+      print('MQTT client exception - $e');
       client.disconnect();
     } on SocketException catch (e) {
-      // Raised by the socket layer
+      print('MQTT client exception - $e');
       client.disconnect();
     }
-    if (client.connectionState == MqttConnectionState.connected) {
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
       emit(MqttConnected());
     } else {
       emit(MqttDisconnected());
@@ -51,8 +55,8 @@ class MqttConCubit extends Cubit<MqttConState> {
   }
 
   void _subscribeToTopic(String topic) {
-    if (client.connectionState == MqttConnectionState.connected) {
-      client.subscribe(topic, MqttQos.exactlyOnce);
+    if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      //client.subscribe(topic, MqttQos.exactlyOnce);
     }
   }
 
@@ -61,6 +65,6 @@ class MqttConCubit extends Cubit<MqttConState> {
     final builder = MqttClientPayloadBuilder();
     builder.addString('Hello from mqtt_client');
     print('EXAMPLE::Subscribing to the Dart/Mqtt_client/testtopic topic');
-    client.subscribe(mqtTopic, MqttQos.exactlyOnce);
+    client.subscribe(mqtPubTopic, MqttQos.exactlyOnce);
   }
 }

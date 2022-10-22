@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +10,16 @@ part 'bt_state.dart';
 StreamController<List<int>> cont = StreamController<List<int>>.broadcast();
 
 class BtCubit extends Cubit<BtState> {
-  bool _asyncMode = false;
+  Stream<List<int>> listStream = cont.stream;
+
+
+
+  // AppMode Auxiliar
+  bool asyncMode = true;
 
   void changeMode(asyncMode) {
-    _asyncMode = asyncMode;
+    disconnectBt();
+    asyncMode = asyncMode;
     return;
   }
 
@@ -22,6 +29,16 @@ class BtCubit extends Cubit<BtState> {
   List<BluetoothCharacteristic> _characteristics = [];
   List<BluetoothDevice?> _deviceList = [];
   List<List<int>> _characteristicData = [];
+  late Stream<List<int>> charStream;
+
+  // getters
+  List<List<int>> getCharacteristicData() => _characteristicData;
+
+  BluetoothDevice? getDevice() => _connectedDevice;
+
+  List<BluetoothCharacteristic> getCharacteristics() => _characteristics;
+
+  List<BluetoothDevice?> getDevices() => _deviceList;
 
   //variáveis para o funcionamento do código
   final FlutterBlue flutterBlue = FlutterBlue.instance;
@@ -40,6 +57,18 @@ class BtCubit extends Cubit<BtState> {
         );
       }
     });
+  }
+
+  Future sinchronize() async {
+    List<BluetoothService> services =
+        await _connectedDevice!.discoverServices();
+    services.forEach((service) {
+      service.characteristics.forEach((characteristic) {
+        listStream = characteristic.value.asBroadcastStream();
+        characteristic.setNotifyValue(!characteristic.isNotifying);
+      });
+    });
+    emit(BtSync());
   }
 
   // look for devices
@@ -74,14 +103,6 @@ class BtCubit extends Cubit<BtState> {
       return [];
     }
   }
-
-  List<List<int>> getCharacteristicData() => _characteristicData;
-
-  BluetoothDevice? getDevice() => _connectedDevice;
-
-  List<BluetoothCharacteristic> getCharacteristics() => _characteristics;
-
-  List<BluetoothDevice?> getDevices() => _deviceList;
 
   Future scanCharacteristics() async {
     _characteristics = [];

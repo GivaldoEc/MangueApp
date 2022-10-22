@@ -17,7 +17,7 @@ class ConfigScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Padding(
                 padding: EdgeInsets.all(15.0),

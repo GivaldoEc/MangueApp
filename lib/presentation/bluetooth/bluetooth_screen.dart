@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/presentation/bluetooth/bluetooth_idle.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 
 import '../../bloc/BTCubit/bt_cubit.dart';
@@ -41,6 +42,8 @@ class BluetoothWidget extends StatelessWidget {
                 );
               } else if (state is BtNothingFound) {
                 return const BLuetoothContainer(text: "Nothing found");
+              }else if(state is BtSync){
+                return BluetoothIdle();
               } else {
                 return const Text("Unknown Bloc State");
               }
