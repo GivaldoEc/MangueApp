@@ -27,6 +27,34 @@ class BLuetoothContainer extends StatelessWidget {
   }
 }
 
+class MqttContainer extends StatelessWidget {
+  final String text;
+  const MqttContainer({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+          ), // TODO: Implement as textcolor
+          borderRadius: const BorderRadius.all(Radius.circular(40))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 25,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ThemeContainer extends StatelessWidget {
   final String text;
 
@@ -42,16 +70,19 @@ class ThemeContainer extends StatelessWidget {
       child: Container(
         width: 300,
         decoration: BoxDecoration(
-            border:
-                Border.all(color: Colors.black,), // TODO: Implement as textcolor
+            border: Border.all(
+              color: Colors.black,
+            ), // TODO: Implement as textcolor
             borderRadius: const BorderRadius.all(Radius.circular(40))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-          child: Text(text,
-          style: const TextStyle(
-            fontSize: 25,
-            color: Colors.black, // TODO: implement cubit
-          ),),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 25,
+              color: Colors.black, // TODO: implement cubit
+            ),
+          ),
         ),
       ),
     );

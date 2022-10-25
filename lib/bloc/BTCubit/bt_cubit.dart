@@ -12,8 +12,6 @@ StreamController<List<int>> cont = StreamController<List<int>>.broadcast();
 class BtCubit extends Cubit<BtState> {
   Stream<List<int>> listStream = cont.stream;
 
-
-
   // AppMode Auxiliar
   bool asyncMode = true;
 
@@ -52,9 +50,7 @@ class BtCubit extends Cubit<BtState> {
           BtOFF(),
         );
       } else if (btState == BluetoothState.on) {
-        emit(
-          BtDisconnected(deviceList: const []),
-        );
+        lookForDevices();
       }
     });
   }
@@ -128,9 +124,7 @@ class BtCubit extends Cubit<BtState> {
       scanCharacteristics(); // just for debug purpouse
       return;
     });
-    print("trying to send");
     await receptor.write([1]);
-    print("sent");
   }
 
   Future sendClosingRequisition(BluetoothCharacteristic receptor) async {

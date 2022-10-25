@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'MangueApp',
         theme: ThemeData(
-          primarySwatch: Colors.blue, // TODO: implement cubit
+          primarySwatch: Colors.grey, // TODO: implement cubit
         ),
         initialRoute: splash,
         onGenerateRoute: RouteGenerator.generateRoute,

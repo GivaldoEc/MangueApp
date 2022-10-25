@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
+import 'package:mangueapp/bloc/MQttConCubit/mqtt_con_cubit.dart';
+import 'package:mangueapp/config/routes/routes.dart';
+import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class GaugeScreen extends StatelessWidget {
+  const GaugeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     BtCubit btCubit = BlocProvider.of<BtCubit>(context);
@@ -17,7 +22,7 @@ class GaugeScreen extends StatelessWidget {
             if (state is BtSync) {
               return StreamBuilder<List<int>>(
                   stream: btCubit.listStream,
-                  initialData: [],
+                  initialData: const [],
                   builder: (context, snapshot) {
                     Uint8List list = Uint8List.fromList(snapshot.data!);
                     ByteData byteData = ByteData.view(list.buffer);
@@ -28,11 +33,16 @@ class GaugeScreen extends StatelessWidget {
 
                     // streammed variables
                     if (snapshot.hasData && snapshot.data![0] != 0) {
-                      print(snapshot.data);
-
                       speed = (byteData.getUint16(15) * 60 / 65535);
                       rpm = (byteData.getUint16(13) * 5000 / 65535);
                       temp = (byteData.getUint8(17) / 1);
+
+                      BlocProvider.of<MqttConCubit>(context).snapShotPacket =
+                          BluetootSyncPack(
+                        speed: speed,
+                        rpm: rpm,
+                        oilTemp: temp,
+                      );
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -113,6 +123,7 @@ class GaugeScreen extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
+                        // Fuel
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40.0),
                           child: SfLinearGauge(
@@ -140,6 +151,7 @@ class GaugeScreen extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
+                        // Battery
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40.0),
                           child: SfLinearGauge(
@@ -234,7 +246,15 @@ class GaugeScreen extends StatelessWidget {
                     );
                   });
             } else {
-              return const Center(child: Text("doidera"));
+              return const Center(
+                  child: Text(
+                "Bluetooth Connection Required!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 35,
+                ),
+              ));
             }
           },
         ),

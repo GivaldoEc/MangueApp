@@ -30,16 +30,16 @@ class ConfigScreen extends StatelessWidget {
               ListView(
                 shrinkWrap: true,
                 children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(themeRoute);
-                      },
-                      child: const ThemeContainer(text: "Themes")),
-                  InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(themeRoute);
-                      },
-                      child: const ThemeContainer(text: "DevMode")),
+                  // InkWell(
+                  //     onTap: () {
+                  //       Navigator.of(context).pushNamed(themeRoute);
+                  //     },
+                  //     child: const ThemeContainer(text: "Themes")),
+                  // InkWell(
+                  //     onTap: () {
+                  //       Navigator.of(context).pushNamed(themeRoute);
+                  //     },
+                  //     child: const ThemeContainer(text: "DevMode")),
                   BlocBuilder<AppModeCubit, AppModeState>(
                     builder: (context, state) {
                       if (state is AppModeAsync) {

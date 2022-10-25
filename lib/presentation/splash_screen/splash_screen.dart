@@ -17,8 +17,8 @@ class SplashScreen extends StatelessWidget {
           children: [
             Image.asset(
               "assets/Icons/Header/caxanga.png",
-              width: 300,
-              height: 300,
+              width: 200,
+              height: 200,
             ),
             const Text(
               "Bem vindo!",

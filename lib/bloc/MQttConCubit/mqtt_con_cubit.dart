@@ -1,6 +1,7 @@
 import 'dart:io';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:meta/meta.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -14,10 +15,14 @@ MqttClient client = MqttServerClient.withPort(mqttBroker, '', 1883);
 class MqttConCubit extends Cubit<MqttConState> {
   MqttConCubit() : super(MqttConInitial());
 
+  BluetootSyncPack snapShotPacket = BluetootSyncPack(
+    rpm: 5000,
+    speed: 50,
+    oilTemp: 100,
+  );
+
 // Connects to a broker
   void connect() async {
-    print(mqttBroker);
-
     client.logging(on: true);
 
     //StreamSubscription subscription;
@@ -37,14 +42,10 @@ class MqttConCubit extends Cubit<MqttConState> {
     // client.connectionMessage = connMess;
 
     try {
-      print("started waiting");
       await client.connect(mqttUsername, mqttPassword);
-      print("ended waiting");
-    } on NoConnectionException catch (e) {
-      print('MQTT client exception - $e');
+    } on NoConnectionException catch (_) {
       client.disconnect();
-    } on SocketException catch (e) {
-      print('MQTT client exception - $e');
+    } on SocketException catch (_) {
       client.disconnect();
     }
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
@@ -54,17 +55,22 @@ class MqttConCubit extends Cubit<MqttConState> {
     }
   }
 
-  void _subscribeToTopic(String topic) {
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      //client.subscribe(topic, MqttQos.exactlyOnce);
-    }
+  void publish(context) {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString({
+      "\"rpm\"": snapShotPacket.rpm,
+      "\"speed\"": snapShotPacket.speed,
+      "\"temp\"": snapShotPacket.oilTemp,
+      "\"fuel\"": snapShotPacket.fuel,
+      "\"battery\"": snapShotPacket.battery,
+      "\"cvt\"": snapShotPacket.cvt,
+    }.toString());
+
+    client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);
   }
 
-  void publish() {
-    print("connected attempt");
-    final builder = MqttClientPayloadBuilder();
-    builder.addString('Hello from mqtt_client');
-    print('EXAMPLE::Subscribing to the Dart/Mqtt_client/testtopic topic');
-    client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);
+  void disconnect() {
+    client.disconnect();
+    emit(MqttDisconnected());
   }
 }

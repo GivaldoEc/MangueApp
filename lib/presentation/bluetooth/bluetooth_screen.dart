@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mangueapp/presentation/bluetooth/bluetooth_idle.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
+import 'package:mangueapp/resources/widgets/progress_indicator.dart';
 
 import '../../bloc/BTCubit/bt_cubit.dart';
 import '../../resources/widgets/bluetooth_list.dart';
@@ -33,7 +34,7 @@ class BluetoothWidget extends StatelessWidget {
               } else if (state is BtConnected) {
                 return const CharacteristicList();
               } else if (state is BtSearching) {
-                return const CircularProgressIndicator();
+                return AppProgressIndicator();
               } else if (state is BtDonwloading) {
                 return const SizedBox(
                   height: 100,
@@ -42,7 +43,7 @@ class BluetoothWidget extends StatelessWidget {
                 );
               } else if (state is BtNothingFound) {
                 return const BLuetoothContainer(text: "Nothing found");
-              }else if(state is BtSync){
+              } else if (state is BtSync) {
                 return BluetoothIdle();
               } else {
                 return const Text("Unknown Bloc State");
