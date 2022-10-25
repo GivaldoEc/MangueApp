@@ -8,8 +8,23 @@ class BluetoothIdle extends StatelessWidget {
   Widget build(BuildContext context) {
     BtCubit cubit = BlocProvider.of<BtCubit>(context);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Conectado"),
+        Image.asset(
+          "assets/Icons/Header/caxanga.png",
+          width: 200,
+          height: 200,
+        ),
+        const Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Text(
+            "Conectado!",
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontSize: 40,
+            ),
+          ),
+        ),
         InkWell(
             onTap: () {
               cubit.disconnectBt();

@@ -31,9 +31,11 @@ class BluetoothWidget extends StatelessWidget {
                     text: "Para começar, ligue o bluetooth");
               } else if (state is BtDisconnected) {
                 return const BluetoothList();
-              } else if (state is BtConnected) {
-                return const CharacteristicList();
-              } else if (state is BtSearching) {
+              } 
+              // else if (state is BtConnected) {
+              //   return const CharacteristicList();
+              // } 
+              else if (state is BtSearching) {
                 return AppProgressIndicator();
               } else if (state is BtDonwloading) {
                 return const SizedBox(

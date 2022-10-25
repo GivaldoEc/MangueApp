@@ -55,7 +55,7 @@ class BtCubit extends Cubit<BtState> {
     });
   }
 
-  Future sinchronize() async {
+  Future synchronize() async {
     List<BluetoothService> services =
         await _connectedDevice!.discoverServices();
     services.forEach((service) {
@@ -107,7 +107,7 @@ class BtCubit extends Cubit<BtState> {
     List<BluetoothService> services =
         await _connectedDevice!.discoverServices();
     Future.delayed(const Duration(seconds: 5), () {
-      emit(BtConnected(device: _connectedDevice!));
+      // emit(BtConnected(device: _connectedDevice!));
       return;
     });
     for (BluetoothService service in services) {
@@ -141,8 +141,7 @@ class BtCubit extends Cubit<BtState> {
     List<BluetoothDevice> connectedDevices = await flutterBlue.connectedDevices;
     if (connectedDevices.contains(device)) {
       _connectedDevice = device;
-      emit(BtConnected(device: device));
-      scanCharacteristics();
+      synchronize();
       return;
     }
     _connectedDevice = null;

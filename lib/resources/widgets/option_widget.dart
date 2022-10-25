@@ -78,6 +78,7 @@ class ThemeContainer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
           child: Text(
             text,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 25,
               color: Colors.black, // TODO: implement cubit

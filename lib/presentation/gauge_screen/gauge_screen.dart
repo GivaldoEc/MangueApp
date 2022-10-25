@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/bloc/MQttConCubit/mqtt_con_cubit.dart';
-import 'package:mangueapp/config/routes/routes.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';

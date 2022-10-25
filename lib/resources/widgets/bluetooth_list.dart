@@ -92,7 +92,7 @@ class CharacteristicList extends StatelessWidget {
                         btCubit.getCharacteristics()[index],
                       );
                     } else {
-                      btCubit.sinchronize();
+                      btCubit.synchronize();
                     }
                   },
                   child: BLuetoothContainer(
