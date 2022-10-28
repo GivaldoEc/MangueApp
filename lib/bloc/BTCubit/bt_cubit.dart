@@ -56,6 +56,7 @@ class BtCubit extends Cubit<BtState> {
   }
 
   Future synchronize() async {
+    // await _connectedDevice!.requestMtu(512);
     List<BluetoothService> services =
         await _connectedDevice!.discoverServices();
     services.forEach((service) {
@@ -134,10 +135,12 @@ class BtCubit extends Cubit<BtState> {
 
   // Key functions
   Future connectToDevice(BluetoothDevice device) async {
+    emit(BtSearching());
     await device.connect(
       autoConnect: false,
       timeout: const Duration(seconds: 7),
     );
+    
     List<BluetoothDevice> connectedDevices = await flutterBlue.connectedDevices;
     if (connectedDevices.contains(device)) {
       _connectedDevice = device;

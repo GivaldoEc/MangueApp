@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:meta/meta.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -13,13 +14,12 @@ part 'mqtt_con_state.dart';
 MqttClient client = MqttServerClient.withPort(mqttBroker, '', 1883);
 
 class MqttConCubit extends Cubit<MqttConState> {
-  MqttConCubit() : super(MqttConInitial());
+  MqttConCubit() : super(MqttConInitial()) {
+    connect();
+  }
 
-  BluetootSyncPack snapShotPacket = BluetootSyncPack(
-    rpm: 5000,
-    speed: 50,
-    oilTemp: 100,
-  );
+  BluetootSyncPack snapShotPacket = BluetootSyncPack();
+  
 
 // Connects to a broker
   void connect() async {
@@ -64,6 +64,8 @@ class MqttConCubit extends Cubit<MqttConState> {
       "\"fuel\"": snapShotPacket.fuel,
       "\"battery\"": snapShotPacket.battery,
       "\"cvt\"": snapShotPacket.cvt,
+      "\"volt\"": snapShotPacket.cvt,
+      "\"soc\"": snapShotPacket.cvt,
     }.toString());
 
     client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);

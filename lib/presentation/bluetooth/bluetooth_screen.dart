@@ -38,10 +38,10 @@ class BluetoothWidget extends StatelessWidget {
               else if (state is BtSearching) {
                 return AppProgressIndicator();
               } else if (state is BtDonwloading) {
-                return const SizedBox(
+                return SizedBox(
                   height: 100,
                   width: 100,
-                  child: CircularProgressIndicator(),
+                  child: AppProgressIndicator(),
                 );
               } else if (state is BtNothingFound) {
                 return const BLuetoothContainer(text: "Nothing found");
