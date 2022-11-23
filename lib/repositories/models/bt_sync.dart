@@ -1,5 +1,14 @@
 class BluetootSyncPack {
-  double rpm, speed, fuel, oilTemp, cvt, battery, soc, latitude, longitude;
+  double rpm,
+      speed,
+      fuel,
+      oilTemp,
+      cvt,
+      battery,
+      soc,
+      latitude,
+      longitude,
+      timeStamp;
 
   BluetootSyncPack({
     this.latitude = 0,
@@ -11,5 +20,6 @@ class BluetootSyncPack {
     this.oilTemp = 0,
     this.rpm = 0,
     this.speed = 0,
+    this.timeStamp = 0,
   });
 }

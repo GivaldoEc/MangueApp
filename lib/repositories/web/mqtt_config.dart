@@ -1,4 +1,4 @@
-const String mqttBroker = '150.161.60.102';
+const String mqttBroker = '192.168.151.254';
 const int mqttPort = 1883;
 const String mqttUsername = 'owntracks';
 const String mqttPassword = 'aratucampeao';

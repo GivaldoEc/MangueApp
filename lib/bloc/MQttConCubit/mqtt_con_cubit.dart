@@ -19,7 +19,6 @@ class MqttConCubit extends Cubit<MqttConState> {
   }
 
   BluetootSyncPack snapShotPacket = BluetootSyncPack();
-  
 
 // Connects to a broker
   void connect() async {
@@ -56,19 +55,31 @@ class MqttConCubit extends Cubit<MqttConState> {
   }
 
   void publish(context) {
-    final builder = MqttClientPayloadBuilder();
-    builder.addString({
-      "\"rpm\"": snapShotPacket.rpm,
-      "\"speed\"": snapShotPacket.speed,
-      "\"temp\"": snapShotPacket.oilTemp,
-      "\"fuel\"": snapShotPacket.fuel,
-      "\"battery\"": snapShotPacket.battery,
-      "\"cvt\"": snapShotPacket.cvt,
-      "\"volt\"": snapShotPacket.cvt,
-      "\"soc\"": snapShotPacket.cvt,
-    }.toString());
+    if (state is MqttConnected) {
+      final builder = MqttClientPayloadBuilder();
+      builder.addString({
+        "\"car\"": 22,
+        "\"accx\"": 0,
+        "\"accy\"": 0,
+        "\"accz\"": 0,
+        "\"rpm\"": snapShotPacket.rpm,
+        "\"speed\"": snapShotPacket.speed,
+        "\"temp\"": snapShotPacket.oilTemp,
+        "\"flags\"": 0,
+        "\"soc\"": snapShotPacket.soc,
+        "\"cvt\"": snapShotPacket.cvt,
+        "\"volt\"": snapShotPacket.battery,
+        "\"latitude\"": snapShotPacket.latitude,
+        "\"longitude\"": snapShotPacket.longitude,
+        "\"timeStamp\"": snapShotPacket.timeStamp,
 
-    client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);
+        // "\"fuel\"": snapShotPacket.fuel,
+      }.toString());
+
+      client.publishMessage(mqtPubTopic, MqttQos.atLeastOnce, builder.payload!);
+    } else {
+      return;
+    }
   }
 
   void disconnect() {

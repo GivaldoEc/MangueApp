@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 import '../../bloc/AppModeCubit/app_mode_cubit.dart';
-import '../../config/routes/routes.dart';
 import '../../resources/widgets/option_widget.dart';
 
 class ConfigScreen extends StatelessWidget {

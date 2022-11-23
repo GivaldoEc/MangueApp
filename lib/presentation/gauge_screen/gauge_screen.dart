@@ -31,7 +31,7 @@ class GaugeScreen extends StatelessWidget {
                       // streammed variables
                       // if (snapshot.hasData && snapshot.data![0] != 0) {
                       Uint8List list = Uint8List.fromList(snapshot.data!);
-                      ByteData byteData = ByteData.view(list.buffer, 1, 10);
+                      ByteData byteData = ByteData.view(list.buffer, 1, 11);
                       // print(snapshot.data!.length); // remember to keep packet size in mind, always
                       // const int offset = 0;
                       mqttPack.rpm = (byteData.getUint16(0) * 12156 / 65535);
