@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:mangueapp/bloc/MQttConCubit/mqtt_con_cubit.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 import 'package:mangueapp/resources/widgets/progress_indicator.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class GaugeScreen extends StatelessWidget {
@@ -13,47 +16,33 @@ class GaugeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BtCubit btCubit = BlocProvider.of<BtCubit>(context);
+    MqttConCubit conCubit = BlocProvider.of<MqttConCubit>(context);
     BluetootSyncPack mqttPack =
         BlocProvider.of<MqttConCubit>(context).snapShotPacket;
 
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<BtCubit, BtState>(
+        child: BlocBuilder<MqttConCubit, MqttConState>(
           builder: (context, state) {
-            if (state is BtSync) {
-              return StreamBuilder<List<int>>(
-                  stream: btCubit.listStream,
+            if (state is MqttConnected) {
+              return StreamBuilder<List<MqttReceivedMessage<MqttMessage>>>(
+                  stream: conCubit.getMessagesStream(),
                   initialData: const [],
                   builder: (context, snapshot) {
-                    // TODO: HardCoded chunck of code... Fix it!
                     if (snapshot.connectionState == ConnectionState.active) {
-                      // streammed variables
-                      // if (snapshot.hasData && snapshot.data![0] != 0) {
-                      Uint8List list = Uint8List.fromList(snapshot.data!);
-                      ByteData byteData = ByteData.view(list.buffer, 1, 11);
-                      // print(snapshot.data!.length); // remember to keep packet size in mind, always
-                      // const int offset = 0;
-                      mqttPack.rpm = (byteData.getUint16(0) * 12156 / 65535);
-                      mqttPack.speed = (byteData.getUint16(2) * 76 / 65535);
-                      mqttPack.oilTemp = (byteData.getUint8(4) * 139 / 256);
-                      mqttPack.cvt = (byteData.getUint8(5) * 95 / 256);
-                      mqttPack.battery = (byteData.getUint8(6) * 257 / 256);
-                      mqttPack.soc = (byteData.getUint8(7) * 856 / 256);
-                      // accX = (byteData.getInt16(8) * 257 / 65535);
-                      // accY = (byteData.getInt16(10) * 257 / 65535);
-                      // accZ = (byteData.getInt16(12) * 257 / 65535);
-                      // dpsX = (byteData.getInt16(14) * 257 / 65535);
-                      // dpsX = (byteData.getInt16(16) * 257 / 65535);
-                      // dpsZ = (byteData.getInt16(18) * 257 / 65535);
-                      mqttPack.latitude = (byteData.getInt8(8) * 257 / 256);
-                      mqttPack.longitude = (byteData.getInt8(9) * -75 / 256);
-                      // timeStamp = (byteData.getUint32(22) * 1000 / 4294967295);
-                      BlocProvider.of<MqttConCubit>(context).publish(
-                          context); // TODO: find a better implementation
+                      final recMess =
+                          snapshot.data![0].payload as MqttPublishMessage;
+                      final pt = MqttPublishPayload.bytesToStringAsString(
+                          recMess.payload.message);
 
-                      print(
-                          "${mqttPack.rpm}, ${mqttPack.speed}, ${mqttPack.oilTemp}, ${mqttPack.cvt}, ${mqttPack.battery}, ${mqttPack.soc}, ${mqttPack.latitude}, ${mqttPack.longitude}");
+                      Map<String, dynamic> map = jsonDecode(pt);
+
+                      mqttPack.rpm = map["rpm"];
+                      mqttPack.speed = map["speed"];
+                      mqttPack.oilTemp = map["motor"];
+                      mqttPack.soc = map["soc"];
+                      mqttPack.battery = map["volt"];
+                      mqttPack.cvt = map["cvt"];
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -270,15 +259,7 @@ class GaugeScreen extends StatelessWidget {
                     }
                   });
             } else {
-              return const Center(
-                  child: Text(
-                "Bluetooth Connection Required!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 35,
-                ),
-              ));
+              return AppProgressIndicator();
             }
           },
         ),

@@ -1,5 +1,8 @@
+import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
@@ -13,12 +16,36 @@ part 'mqtt_con_state.dart';
 
 MqttClient client = MqttServerClient.withPort(mqttBroker, '', 1883);
 
+StreamController<String> cont = StreamController<String>.broadcast();
+
 class MqttConCubit extends Cubit<MqttConState> {
+  Stream<String> listStream = cont.stream;
+
   MqttConCubit() : super(MqttConInitial()) {
     connect();
   }
 
   BluetootSyncPack snapShotPacket = BluetootSyncPack();
+
+  Future subscribeToTopic() async {
+    client.subscribe(mqttSubTopic, MqttQos.atMostOnce);
+  }
+
+  Stream<List<MqttReceivedMessage<MqttMessage>>>? getMessagesStream() {
+    return client.updates;
+  }
+
+void setupUpdatesListener() {
+    getMessagesStream()!
+        .listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+      final recMess = c![0].payload as MqttPublishMessage;
+      final pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      print('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
+    });
+  }
+
+
 
 // Connects to a broker
   void connect() async {
@@ -48,6 +75,7 @@ class MqttConCubit extends Cubit<MqttConState> {
       client.disconnect();
     }
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
+      subscribeToTopic();
       emit(MqttConnected());
     } else {
       emit(MqttDisconnected());

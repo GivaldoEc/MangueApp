@@ -4,3 +4,4 @@ const String mqttUsername = 'owntracks';
 const String mqttPassword = 'aratucampeao';
 const String clientIdentifier = 'xereca';
 const String mqtPubTopic = '/testesafado';
+const String mqttSubTopic = '';
