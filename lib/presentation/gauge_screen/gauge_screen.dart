@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/bloc/MQttConCubit/mqtt_con_cubit.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
@@ -17,8 +15,7 @@ class GaugeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MqttConCubit conCubit = BlocProvider.of<MqttConCubit>(context);
-    BluetootSyncPack mqttPack =
-        BlocProvider.of<MqttConCubit>(context).snapShotPacket;
+    BluetootSyncPack mqttPack = conCubit.snapShotPacket;
 
     return Scaffold(
       body: SafeArea(
@@ -259,7 +256,17 @@ class GaugeScreen extends StatelessWidget {
                     }
                   });
             } else {
-              return AppProgressIndicator();
+              return Column(
+                children: [
+                  AppProgressIndicator(),
+                  ElevatedButton(
+                    onPressed: () {
+                      conCubit.connect();
+                    },
+                    child: const Text("Retry Connection"),
+                  ),
+                ],
+              );
             }
           },
         ),

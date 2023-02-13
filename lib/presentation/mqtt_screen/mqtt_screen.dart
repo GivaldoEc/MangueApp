@@ -76,7 +76,7 @@ class MqttPage extends StatelessWidget {
                         )),
                     InkWell(
                         onTap: () {
-                          connectionCubit.publish(context);
+                          //connectionCubit.publish(context);
                         },
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),

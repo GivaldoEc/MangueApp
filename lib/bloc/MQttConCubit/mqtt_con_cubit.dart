@@ -82,6 +82,7 @@ void setupUpdatesListener() {
     }
   }
 
+/*
   void publish(context) {
     if (state is MqttConnected) {
       final builder = MqttClientPayloadBuilder();
@@ -108,7 +109,7 @@ void setupUpdatesListener() {
     } else {
       return;
     }
-  }
+  } */
 
   void disconnect() {
     client.disconnect();
