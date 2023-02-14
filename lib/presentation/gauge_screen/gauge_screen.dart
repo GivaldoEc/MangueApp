@@ -38,8 +38,9 @@ class GaugeScreen extends StatelessWidget {
                       mqttPack.speed = map["speed"];
                       mqttPack.oilTemp = map["motor"];
                       mqttPack.soc = map["soc"];
-                      mqttPack.battery = map["volt"];
+                      // mqttPack.battery = map["volt"];
                       mqttPack.cvt = map["cvt"];
+                      mqttPack.fuel = map["fuel"];
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -57,7 +58,7 @@ class GaugeScreen extends StatelessWidget {
                                     RadialAxis(
                                       pointers: <GaugePointer>[
                                         RangePointer(
-                                          value: mqttPack.speed,
+                                          value: mqttPack.speed.toDouble(),
                                           color: Colors.black,
                                         )
                                       ],
@@ -89,7 +90,7 @@ class GaugeScreen extends StatelessWidget {
                                     RadialAxis(
                                       pointers: <GaugePointer>[
                                         RangePointer(
-                                          value: mqttPack.rpm,
+                                          value: mqttPack.rpm.toDouble(),
                                           color: Colors.black,
                                         )
                                       ],
@@ -136,9 +137,9 @@ class GaugeScreen extends StatelessWidget {
                               ],
                               minimum: 0,
                               maximum: 7,
-                              barPointers: const [
+                              barPointers: [
                                 LinearBarPointer(
-                                  value: 0,
+                                  value: mqttPack.fuel.toDouble(),
                                   color: Colors.black,
                                 ),
                               ],
@@ -163,9 +164,9 @@ class GaugeScreen extends StatelessWidget {
                                   color: Colors.red,
                                 ),
                               ],
-                              barPointers: const [
+                              barPointers: [
                                 LinearBarPointer(
-                                  value: 0,
+                                  value: mqttPack.soc.toDouble(),
                                   color: Colors.black,
                                 ),
                               ],
@@ -182,7 +183,7 @@ class GaugeScreen extends StatelessWidget {
                                     RadialAxis(
                                       pointers: <GaugePointer>[
                                         RangePointer(
-                                          value: mqttPack.oilTemp,
+                                          value: mqttPack.oilTemp.toDouble(),
                                           color: Colors.black,
                                         )
                                       ],
@@ -219,7 +220,7 @@ class GaugeScreen extends StatelessWidget {
                                     RadialAxis(
                                       pointers: <GaugePointer>[
                                         RangePointer(
-                                          value: mqttPack.cvt,
+                                          value: mqttPack.cvt.toDouble(),
                                           color: Colors.black,
                                         )
                                       ],
@@ -256,16 +257,22 @@ class GaugeScreen extends StatelessWidget {
                     }
                   });
             } else {
-              return Column(
-                children: [
-                  AppProgressIndicator(),
-                  ElevatedButton(
-                    onPressed: () {
-                      conCubit.connect();
-                    },
-                    child: const Text("Retry Connection"),
-                  ),
-                ],
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppProgressIndicator(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          conCubit.connect();
+                        },
+                        child: const Text("Retry Connection"),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
           },

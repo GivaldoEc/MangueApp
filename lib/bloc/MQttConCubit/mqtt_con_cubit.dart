@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mangueapp/bloc/BTCubit/bt_cubit.dart';
 import 'package:mangueapp/repositories/models/bt_sync.dart';
 import 'package:meta/meta.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -14,7 +11,7 @@ import '../../repositories/web/mqtt_config.dart';
 
 part 'mqtt_con_state.dart';
 
-MqttClient client = MqttServerClient.withPort(mqttBroker, '', 1883);
+MqttClient client = MqttServerClient.withPort(mqttBroker, mqttUsername, mqttPort);
 
 StreamController<String> cont = StreamController<String>.broadcast();
 
@@ -35,17 +32,14 @@ class MqttConCubit extends Cubit<MqttConState> {
     return client.updates;
   }
 
-void setupUpdatesListener() {
-    getMessagesStream()!
-        .listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+  void setupUpdatesListener() {
+    getMessagesStream()!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       print('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
     });
   }
-
-
 
 // Connects to a broker
   void connect() async {
@@ -60,12 +54,14 @@ void setupUpdatesListener() {
     client.port = mqttPort;
 
     client.websocketProtocols = MqttClientConstants.protocolsMultipleDefault;
+/*
+    final MqttConnectMessage connMess = MqttConnectMessage()
+        .withClientIdentifier(mqttUsername)
+        .startClean() // Non persistent session for testing
+        .withWillQos(MqttQos.atMostOnce);
+    client.connectionMessage = connMess;
+*/
 
-    // final MqttConnectMessage connMess = MqttConnectMessage()
-    //     .withClientIdentifier(mqttUsername)
-    //     .startClean() // Non persistent session for testing
-    //     .withWillQos(MqttQos.atMostOnce);
-    // client.connectionMessage = connMess;
 
     try {
       await client.connect(mqttUsername, mqttPassword);
