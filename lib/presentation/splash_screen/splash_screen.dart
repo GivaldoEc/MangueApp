@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pushNamed(bluetoothRoute);
+      Navigator.of(context).pushNamed(gaugeRoute);
     });
     return Scaffold(
       body: Center(

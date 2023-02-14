@@ -22,7 +22,7 @@ class RouteGenerator {
       case themeRoute:
         return MaterialPageRoute(builder: (_) => const ThemeScreen());
       case gaugeRoute:
-        return MaterialPageRoute(builder: (_) => GaugeScreen());
+        return MaterialPageRoute(builder: (_) => const GaugeScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case mqttRoute:

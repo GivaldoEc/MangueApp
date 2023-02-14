@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 part 'app_mode_state.dart';
 
-bool asyncMode = true;
+bool asyncMode = false;
 
 class AppModeCubit extends Cubit<AppModeState> {
   AppModeCubit() : super(AppModeInitial()) {
