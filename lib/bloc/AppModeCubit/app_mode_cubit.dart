@@ -8,7 +8,7 @@ bool asyncMode = false;
 
 class AppModeCubit extends Cubit<AppModeState> {
   AppModeCubit() : super(AppModeInitial()) {
-    emit(AppModeAsync());
+    emit(AppModeSync());
   }
 
   void changeMode(context) {

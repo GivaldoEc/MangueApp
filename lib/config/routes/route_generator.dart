@@ -15,8 +15,7 @@ class RouteGenerator {
     switch (settings.name) {
       case bluetoothRoute:
         return MaterialPageRoute(builder: (_) => const BluetoothWidget());
-      case configRoute:
-        return MaterialPageRoute(builder: (_) => const ConfigScreen());
+
       case graphRoute:
         return MaterialPageRoute(builder: (_) => const GraphicScreen());
       case themeRoute:

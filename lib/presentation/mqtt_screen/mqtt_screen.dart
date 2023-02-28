@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mangueapp/bloc/AppModeCubit/app_mode_cubit.dart';
 import 'package:mangueapp/bloc/MQttConCubit/mqtt_con_cubit.dart';
 import 'package:mangueapp/resources/widgets/navigation_bar.dart';
 import 'package:mangueapp/resources/widgets/option_widget.dart';
@@ -9,6 +10,7 @@ class MqttPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MqttConCubit connectionCubit = BlocProvider.of<MqttConCubit>(context);
+    AppModeCubit appModeCubit = BlocProvider.of<AppModeCubit>(context);
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: const MainNavigationBar(),
@@ -74,14 +76,30 @@ class MqttPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(vertical: 20),
                           child: MqttContainer(text: "Disconnect"),
                         )),
-                    InkWell(
-                        onTap: () {
-                          //connectionCubit.publish(context);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: MqttContainer(text: "Test Packet"),
-                        )),
+                    BlocBuilder<AppModeCubit, AppModeState>(
+                      builder: (context, state) {
+                        if (state is AppModeAsync) {
+                        return InkWell(
+                          onTap: () {
+                            appModeCubit.changeMode(context);
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: MqttContainer(text: "Sync Mode"),
+                          ),
+                        );} else{
+                          return InkWell(
+                          onTap: () {
+                            appModeCubit.changeMode(context);
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: MqttContainer(text: "Async Mode"),
+                          ),
+                        );
+                        }
+                      },
+                    ),
                   ],
                 );
               }
