@@ -34,13 +34,13 @@ class GaugeScreen extends StatelessWidget {
 
                       Map<String, dynamic> map = jsonDecode(pt);
 
-                      mqttPack.rpm = map["rpm"];
-                      mqttPack.speed = map["speed"];
+                      mqttPack.rpm = (map["rpm"]/65535)*5000;
+                      mqttPack.speed = (map["speed"]/65535)*60;
                       mqttPack.oilTemp = map["motor"];
                       mqttPack.soc = map["soc"];
-                      // mqttPack.battery = map["volt"];
+                      mqttPack.battery = map["volt"];
                       mqttPack.cvt = map["cvt"];
-                      mqttPack.fuel = map["fuel"];
+                      //mqttPack.fuel = map["fuel"]; --> replace
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
