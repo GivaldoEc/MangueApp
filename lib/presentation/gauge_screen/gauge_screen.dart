@@ -34,23 +34,25 @@ class GaugeScreen extends StatelessWidget {
 
                       Map<String, dynamic> map = jsonDecode(pt);
 
-                      mqttPack.rpm = (map["rpm"]/65535)*5000;
-                      mqttPack.speed = (map["speed"]/65535)*60;
+                      mqttPack.rpm = (map["rpm"] / 65535) * 5000;
+                      mqttPack.speed = (map["speed"] / 65535) * 60;
                       mqttPack.oilTemp = map["motor"];
                       mqttPack.soc = map["soc"];
                       mqttPack.battery = map["volt"];
                       mqttPack.cvt = map["cvt"];
                       //mqttPack.fuel = map["fuel"]; --> replace
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      return ListView(
                         children: [
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               // Speed
                               SizedBox(
-                                width: 200,
-                                height: 200,
+                                width: MediaQuery.of(context).size.width * .35,
+                                height:
+                                    MediaQuery.of(context).size.height * .35,
                                 child: SfRadialGauge(
                                   animationDuration: 0,
                                   enableLoadingAnimation: false,
@@ -83,8 +85,9 @@ class GaugeScreen extends StatelessWidget {
                               ),
                               // RPM
                               SizedBox(
-                                width: 200,
-                                height: 200,
+                                width: MediaQuery.of(context).size.width * .35,
+                                height:
+                                    MediaQuery.of(context).size.height * .35,
                                 child: SfRadialGauge(
                                   axes: <RadialAxis>[
                                     RadialAxis(
@@ -116,17 +119,22 @@ class GaugeScreen extends StatelessWidget {
                             ],
                           ),
                           // Fuel
-                          const Text(
-                            "Fuel",
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 20,
+                          const Center(
+                            child: Text(
+                              "Fuel",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           // Fuel
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * .2,
+                                vertical:
+                                    MediaQuery.of(context).size.height * .03),
                             child: SfLinearGauge(
                               ranges: const [
                                 LinearGaugeRange(
@@ -145,17 +153,22 @@ class GaugeScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const Text(
-                            "Battery",
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontSize: 20,
+                          const Center(
+                            child: Text(
+                              "Battery",
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           // Battery
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 40.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * .2,
+                                vertical:
+                                    MediaQuery.of(context).size.height * .03),
                             child: SfLinearGauge(
                               ranges: const [
                                 LinearGaugeRange(
@@ -172,12 +185,18 @@ class GaugeScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .03,
+                          ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               // Temp do óleo
                               SizedBox(
-                                width: 200,
-                                height: 200,
+                                width: MediaQuery.of(context).size.width * .35,
+                                height:
+                                    MediaQuery.of(context).size.height * .35,
                                 child: SfRadialGauge(
                                   axes: <RadialAxis>[
                                     RadialAxis(
@@ -213,8 +232,9 @@ class GaugeScreen extends StatelessWidget {
                               ),
                               // Temp Da CVT
                               SizedBox(
-                                width: 200,
-                                height: 200,
+                                width: MediaQuery.of(context).size.width * .35,
+                                height:
+                                    MediaQuery.of(context).size.height * .35,
                                 child: SfRadialGauge(
                                   axes: <RadialAxis>[
                                     RadialAxis(
