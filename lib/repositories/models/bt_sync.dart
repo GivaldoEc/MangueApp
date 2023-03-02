@@ -1,6 +1,6 @@
 class BluetootSyncPack {
-  int fuel, soc, timeStamp;
-  double latitude, longitude, oilTemp, cvt, battery, rpm, speed;
+  int fuel, soc, timeStamp, rpm, speed;
+  double latitude, longitude, oilTemp, cvt, battery;
 
   BluetootSyncPack({
     this.latitude = 0,

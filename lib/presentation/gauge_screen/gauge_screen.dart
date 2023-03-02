@@ -34,8 +34,8 @@ class GaugeScreen extends StatelessWidget {
 
                       Map<String, dynamic> map = jsonDecode(pt);
 
-                      mqttPack.rpm = (map["rpm"] / 65535) * 5000;
-                      mqttPack.speed = (map["speed"] / 65535) * 60;
+                      mqttPack.rpm = map["rpm"];
+                      mqttPack.speed = map["speed"];
                       mqttPack.oilTemp = map["motor"];
                       mqttPack.soc = map["soc"];
                       mqttPack.battery = map["volt"];
