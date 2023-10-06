@@ -1,6 +1,4 @@
-import 'package:csv/csv.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -8,8 +6,6 @@ part 'graph_state.dart';
 
 class GraphCubit extends Cubit<GraphState> {
   GraphCubit() : super(GraphInitial());
-
-  List<double> _data = [];
 
   List<FlSpot> _spotlist = [];
   List<FlSpot> getSpots() => _spotlist;

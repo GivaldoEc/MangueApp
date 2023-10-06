@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 part 'bt_state.dart';
 
@@ -39,17 +38,17 @@ class BtCubit extends Cubit<BtState> {
   List<BluetoothDevice?> getDevices() => _deviceList;
 
   //variáveis para o funcionamento do código
-  final FlutterBlue flutterBlue = FlutterBlue.instance;
   late StreamSubscription btSubscription;
 
   //Emite estados do bloc com base no bluetooth
   BtCubit() : super(BtInitial()) {
-    btSubscription = flutterBlue.state.listen((btState) {
-      if (btState == BluetoothState.off) {
+    btSubscription =
+        FlutterBluePlus.adapterState.listen((BluetoothAdapterState btState) {
+      if (btState == BluetoothAdapterState.off) {
         emit(
           BtOFF(),
         );
-      } else if (btState == BluetoothState.on) {
+      } else if (btState == BluetoothAdapterState.on) {
         lookForDevices();
       }
     });
@@ -72,12 +71,12 @@ class BtCubit extends Cubit<BtState> {
   Future<List<BluetoothDevice>> lookForDevices() async {
     List<BluetoothDevice> devices = [];
 
-    flutterBlue.startScan(timeout: const Duration(seconds: 5));
+    FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
 
     emit(BtSearching());
 
     // Starts looking
-    btSubscription = flutterBlue.scanResults.listen(
+    btSubscription = FlutterBluePlus.scanResults.listen(
       (results) {
         for (ScanResult r in results) {
           if (!devices.contains(r.device)) {
@@ -88,7 +87,7 @@ class BtCubit extends Cubit<BtState> {
     );
     await Future.delayed(const Duration(seconds: 5));
     //Para de procurar
-    flutterBlue.stopScan();
+    FlutterBluePlus.stopScan();
 
     if (devices.isNotEmpty) {
       _deviceList = devices;
@@ -140,8 +139,9 @@ class BtCubit extends Cubit<BtState> {
       autoConnect: false,
       timeout: const Duration(seconds: 7),
     );
-    
-    List<BluetoothDevice> connectedDevices = await flutterBlue.connectedDevices;
+
+    List<BluetoothDevice> connectedDevices =
+        await FlutterBluePlus.connectedSystemDevices;
     if (connectedDevices.contains(device)) {
       _connectedDevice = device;
       synchronize();

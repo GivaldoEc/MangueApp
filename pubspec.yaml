@@ -20,8 +20,8 @@ dependencies:
   sqflite: ^2.0.3+1
 
   # bluetooth
-  flutter_blue: ^0.8.0
-
+  flutter_blue_plus: ^1.16.2
+  
   # csv
   csv: ^5.0.1 # downloaded simply for a test, shall be ignored near the final version
   
