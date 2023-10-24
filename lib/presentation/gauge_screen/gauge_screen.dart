@@ -38,9 +38,9 @@ class GaugeScreen extends StatelessWidget {
                       mqttPack.speed = map["speed"];
                       mqttPack.oilTemp = map["motor"];
                       mqttPack.soc = map["soc"];
-                      mqttPack.battery = map["volt"];
+                      //mqttPack.battery = map["volt"];
                       mqttPack.cvt = map["cvt"];
-                      //mqttPack.fuel = map["fuel"]; --> replace
+                      mqttPack.fuel = map["fuel_level"];
 
                       return ListView(
                         children: [
@@ -139,12 +139,12 @@ class GaugeScreen extends StatelessWidget {
                               ranges: const [
                                 LinearGaugeRange(
                                   startValue: 0,
-                                  endValue: 1,
+                                  endValue: 20,
                                   color: Colors.red,
                                 ),
                               ],
                               minimum: 0,
-                              maximum: 7,
+                              maximum: 100,
                               barPointers: [
                                 LinearBarPointer(
                                   value: mqttPack.fuel.toDouble(),
